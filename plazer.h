@@ -31,5 +31,6 @@ typedef struct {
 #define PLAZER_SET_CONV     _IOW (PLAZER_MAGIC, 2, plazer_conv_t *)
 #define PLAZER_READ_MEMORY  _IOWR(PLAZER_MAGIC, 3, plazer_mem_t *)
 #define PLAZER_RESET        _IOW (PLAZER_MAGIC, 4, plazer_mem_t *)
+#define PLAZER_GET_BUFFER   _IOWR(PLAZER_MAGIC, 5, unsigned char *)
 
 #endif

@@ -138,6 +138,18 @@ void generate_gaussian(float sigma, unsigned char * buffer, size_t buflen) {
     }
 }
 
+void plazer_read_buffer() {
+    unsigned char bytes[60];
+
+    if (ioctl(plazer_fd, PLAZER_GET_BUFFER, bytes)) {
+        perror("ioctl(PLAZER_READ_MEMORY) failed");
+        return;
+    }
+
+    print_buf(bytes, 60);
+
+}
+
 int main()
 {
     static const char filename[] = "/dev/plazer";
@@ -169,14 +181,15 @@ int main()
     plazer_read_memory();
 
     memset(&arg, 0, sizeof(plazer_arg_t));
-    arg.data[0] = 0xff;
+    arg.data[4] = 0xff;
 
     plazer_conv_max(&arg);
 
     plazer_read_memory();
+    //plazer_read_buffer();
 
-    printf("result:\n");
-    printf("max: %d at position %d\n", arg.convmax, arg.maxpos);
+    //printf("result:\n");
+    //printf("max: %d at position %d\n", arg.convmax, arg.maxpos);
 
     printf("plazer userspace program terminating\n");
     return 0;

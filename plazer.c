@@ -70,10 +70,10 @@ static long plazer_conv_max(plazer_arg_t * user_arg_ptr) {
     memcpy(dev.buffer + DATA_START, &arg, DATA_END - DATA_START);
     iowrite32_rep_fixed(DATA_START, dev.buffer + DATA_START, (DATA_END - DATA_START) / 4);
 
-    dev.buffer[RESULT_LOC] = ioread32(dev.buffer + RESULT_LOC);
+    *((u32*)&(dev.buffer[RESULT_LOC])) = ioread32(dev.virtbase + RESULT_LOC);
 
-    arg.convmax = (dev.buffer[RESULT_LOC] & MAXVAL_MASK) >> MAXVAL_OFFSET;
-    arg.maxpos = (dev.buffer[RESULT_LOC] & MAXPOS_MASK) >> MAXPOS_OFFSET;
+    arg.convmax = ((u16)dev.buffer[RESULT_LOC] << 8) | dev.buffer[RESULT_LOC + 1];
+    arg.maxpos = dev.buffer[RESULT_LOC + 2];
 
     if (copy_to_user(user_arg_ptr, &arg, sizeof(plazer_arg_t))) {
         return -EACCES;
@@ -108,13 +108,20 @@ static long plazer_read_memory(plazer_mem_t *user_arg_ptr) {
     memcpy(arg.data.right_fill, dev.buffer + DATA_CONV_END, DATA_END - DATA_CONV_END);
     memcpy(arg.conv.conv, dev.buffer + FILTER_START, FILTER_END - FILTER_START);
 
-    arg.data.convmax = (dev.buffer[RESULT_LOC] & MAXVAL_MASK) >> MAXVAL_OFFSET;
-    arg.data.maxpos = (dev.buffer[RESULT_LOC] & MAXPOS_MASK) >> MAXPOS_OFFSET;
+    arg.data.convmax = ((u16)dev.buffer[RESULT_LOC] << 8) | dev.buffer[RESULT_LOC + 1];
+    arg.data.maxpos = dev.buffer[RESULT_LOC + 2];
 
     if (copy_to_user(user_arg_ptr, &arg, sizeof(plazer_mem_t))) {
         return -EACCES;
     }
     return 0;
+}
+
+static long plazer_get_buffer(unsigned char *user_arg_ptr) {
+   if (copy_to_user(user_arg_ptr, dev.buffer, sizeof(dev.buffer))) {
+       return -EACCES;
+   }
+   return 0;
 }
 
 static long plazer_reset() {
@@ -140,6 +147,8 @@ static long plazer_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
             return plazer_read_memory(arg);
         case PLAZER_RESET:
             return plazer_reset();
+        case PLAZER_GET_BUFFER:
+            return plazer_get_buffer(arg);
         default:
             return -EINVAL;
     }

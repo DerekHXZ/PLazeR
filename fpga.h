@@ -12,7 +12,7 @@
 #define FILTER_START        (DATA_END)
 #define FILTER_END          (DATA_END + 8)
 
-#define RESULT_LOC          (FPGA_BASE_ADDRESS + 56)
+#define RESULT_LOC          (56) // FILTER_END)
 #define READY_MASK          (0x00000001)
 #define MAXVAL_MASK         (0xffff0000)
 #define MAXVAL_OFFSET       (16)
