@@ -180,6 +180,8 @@ int main(int argc, char **argv) {
     size_t size_data = sizeof(arg.data);
     size_t size_rightfill = sizeof(arg.right_fill);
     for(int i = 0; i < image.rows; ++i) {
+	int row_convmax = -1;
+	int row_maxpos = -1;
 	for(int j = 0; j < image.cols; j += size_data) {
 	    memcpy(arg.data, raw[i] + j, size_data);
 	    
@@ -198,11 +200,13 @@ int main(int argc, char **argv) {
 	    }
 
 	    plazer_conv_max(&arg);
-	    printf("result:\n");
-	    printf("max: %d at position %d\n", arg.convmax, arg.maxpos);
 
+	    if(arg.convmax > row_convmax) {
+		row_convmax = arg.convmax;
+		row_maxpos = j + arg.maxpos;
+	    }
 	}
-	return 0;
+	printf("row = %d; maxpos = %d; convmax = %d\n", i, row_maxpos, row_convmax);
     }
     printf("plazer userspace program terminating\n");
 
