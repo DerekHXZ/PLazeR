@@ -19,7 +19,7 @@
 
 int plazer_fd;
 
-int emulation_mode = 1;
+int emulation_mode = 0;
 
 plazer_mem_t emulation_buffer;
 
@@ -202,6 +202,7 @@ int main(int argc, char **argv) {
 	    printf("max: %d at position %d\n", arg.convmax, arg.maxpos);
 
 	}
+	return 0;
     }
     printf("plazer userspace program terminating\n");
 

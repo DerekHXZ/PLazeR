@@ -173,6 +173,8 @@ int main()
 
     plazer_conv_max(&arg);
 
+    plazer_read_memory();
+
     printf("result:\n");
     printf("max: %d at position %d\n", arg.convmax, arg.maxpos);
 

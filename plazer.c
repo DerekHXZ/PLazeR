@@ -45,6 +45,22 @@ struct plazer_dev {
     u8 buffer[PLAZER_SIZE];
 } dev;
 
+void ioread32_rep_fixed(unsigned long offset, u8 * pr, size_t num) {
+    u32 * ptr = (u32 *) pr;
+    int i = 0;
+    for (i = 0; i < num; ++i) {
+	ptr[i] = ioread32(dev.virtbase + offset + i * 4);
+    }
+}
+
+void iowrite32_rep_fixed(unsigned long offset, u8 * pr, size_t num) {
+    u32 * ptr = (u32 *) pr;
+    int i = 0;
+    for (i = 0; i < num; ++i) {
+        iowrite32(ptr[i], dev.virtbase + offset + i * 4);
+    }
+}
+
 static long plazer_conv_max(plazer_arg_t * user_arg_ptr) {
     plazer_arg_t arg;
     if (copy_from_user(&arg, user_arg_ptr, sizeof(plazer_arg_t))) {
@@ -52,7 +68,7 @@ static long plazer_conv_max(plazer_arg_t * user_arg_ptr) {
     }
 
     memcpy(dev.buffer + DATA_START, &arg, DATA_END - DATA_START);
-    iowrite32_rep(dev.virtbase + DATA_START, dev.buffer + DATA_START, (DATA_END - DATA_START) / 4);
+    iowrite32_rep_fixed(DATA_START, dev.buffer + DATA_START, (DATA_END - DATA_START) / 4);
 
     dev.buffer[RESULT_LOC] = ioread32(dev.buffer + RESULT_LOC);
 
@@ -73,14 +89,7 @@ static long plazer_set_convolution(plazer_conv_t * user_arg_ptr) {
 
     memcpy(dev.buffer + FILTER_START, arg.conv, FILTER_END - FILTER_START);
 
-    int i;
-    printk(KERN_INFO "---\n");
-    for (i = FILTER_START; i < FILTER_END; i++) {
-        printk(KERN_INFO "%x\n", dev.buffer[i]);
-    }
-    printk(KERN_INFO "---\n");
-
-    iowrite32_rep(dev.virtbase + FILTER_START, dev.buffer + FILTER_START, (FILTER_END - FILTER_START) / 4);
+    iowrite32_rep_fixed(FILTER_START, dev.buffer + FILTER_START, (FILTER_END - FILTER_START) / 4);
 
     return 0;
 }
@@ -92,7 +101,7 @@ static long plazer_read_memory(plazer_mem_t *user_arg_ptr) {
         return -EACCES;
     }
 
-    ioread32_rep(dev.virtbase, dev.buffer, PLAZER_SIZE_32);
+    ioread32_rep_fixed(0, dev.buffer, PLAZER_SIZE_32);
 
     memcpy(arg.data.left_fill, dev.buffer, DATA_CONV_START - DATA_START);
     memcpy(arg.data.data, dev.buffer + DATA_CONV_START, DATA_CONV_END - DATA_CONV_START);
@@ -102,13 +111,6 @@ static long plazer_read_memory(plazer_mem_t *user_arg_ptr) {
     arg.data.convmax = (dev.buffer[RESULT_LOC] & MAXVAL_MASK) >> MAXVAL_OFFSET;
     arg.data.maxpos = (dev.buffer[RESULT_LOC] & MAXPOS_MASK) >> MAXPOS_OFFSET;
 
-    int i;
-    printk(KERN_INFO "---\n");
-    for (i = FILTER_START; i < FILTER_END; i++) {
-        printk(KERN_INFO "%x\n", dev.buffer[i]);
-    }
-    printk(KERN_INFO "---\n");
-
     if (copy_to_user(user_arg_ptr, &arg, sizeof(plazer_mem_t))) {
         return -EACCES;
     }
@@ -117,8 +119,8 @@ static long plazer_read_memory(plazer_mem_t *user_arg_ptr) {
 
 static long plazer_reset() {
     memset(dev.buffer, 0, PLAZER_SIZE);
-    iowrite32_rep(dev.virtbase, dev.buffer, PLAZER_SIZE_32);
-    ioread32_rep(dev.virtbase, dev.buffer, PLAZER_SIZE_32);
+    iowrite32_rep_fixed(0, dev.buffer, PLAZER_SIZE_32);
+    ioread32_rep_fixed(dev.virtbase, dev.buffer, PLAZER_SIZE_32);
     return 0;
 }
 

@@ -4,13 +4,15 @@ ifneq (${KERNELRELEASE},)
         obj-m := plazer.o
 
 else
-
 # We are being compiled as a module: use the Kernel build system
 
 	KERNEL_SOURCE := /usr/src/linux
         PWD := $(shell pwd)
 
 default: module app
+
+app:
+	gcc app.c -o app -lm
 
 module:
 	${MAKE} -C ${KERNEL_SOURCE} SUBDIRS=${PWD} modules
