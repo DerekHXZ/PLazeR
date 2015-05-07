@@ -21,7 +21,7 @@ begin
 	for(i = 0; i < 17; i+=1) begin: init_i
 		for(j = 0; j < 17; j+=1) begin: init_j
 		always_comb begin
-			pixels[i*j] <= in_pixels[(i*3+j)*8+7 : (i*3+j)*8];
+			pixels[i*j] <= in_pixels[(i*17+j)*8+7 : (i*17+j)*8];
 		end
 	end
 	end
@@ -38,7 +38,7 @@ begin
 			real w = exp(-dsq / 2.0) / 6.28;
 			
 			always_comb begin
-				int index = (di+1)*3 + dj+1;
+				int index = (di+8)*17 + dj+8;
 				val += pixels[index] * w;
 				wsum += w;
 			end
