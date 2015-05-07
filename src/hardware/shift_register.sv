@@ -6,7 +6,7 @@
 // Description: A shift register that shifts one pixel (8 bit) each time.
 
 module shift_register (
-  output [71:0] out,
+  output [2311:0] out, //17*17*8 = 2312
   input [7:0] pix_in,
   input shift_enable,
   input n_rst, clear, clk
@@ -14,7 +14,7 @@ module shift_register (
 
 genvar k;
 generate
-	for (k = 0; k < 9; k = k + 1) begin: shiftgen
+	for (k = 0; k < 289; k = k + 1) begin: shiftgen
 		always_ff @ (posedge clk, negedge n_rst) begin : SR
 		  if(n_rst == 1'b0) begin
 			 out[k*8+7:k*8] <= 8'b0;

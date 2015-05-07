@@ -54,7 +54,7 @@ module top_levelu
   
   
   //WIRES:
-  wire [71:0] w_pixel_matrix;
+  wire [2311:0] w_pixel_matrix;
   wire w_start;
   wire w_overflow;
   wire w_underflow;
@@ -71,10 +71,7 @@ module top_levelu
     .in_pixels(w_pixel_matrix),
     
     // output
-    .out_pixel(w_arith_out),
-    .overflow(w_overflow), 
-    .underflow(w_underflow)
-    
+    .out_pixel(w_arith_out)
     );
   
   ImageSpecRegs IMGSPECREGS   (
