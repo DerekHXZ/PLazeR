@@ -9,7 +9,7 @@ module convmax(
 );
 
 conv c1(.clk        (clk),
-        .data       (indata[4:0]),
+        .data       (indata[15:0]),
         .gauss      (gauss),
         .convvalue  (maxval)
         );
