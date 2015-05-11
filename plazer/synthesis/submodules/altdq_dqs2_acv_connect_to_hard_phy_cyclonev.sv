@@ -1,4 +1,4 @@
-// (C) 2001-2014 Altera Corporation. All rights reserved.
+// (C) 2001-2013 Altera Corporation. All rights reserved.
 // Your use of Altera Corporation's design tools, logic functions and other 
 // software and tools, and its AMPP partner logic functions, and any output 
 // files any of the foregoing (including device programming or simulation 
@@ -115,7 +115,6 @@ parameter PREAMBLE_TYPE = "none";
 parameter USE_DATA_OE_FOR_OCT = "false";
 parameter DQS_ENABLE_WIDTH = 1;
 parameter EMIF_UNALIGNED_PREAMBLE_SUPPORT = "false";
-parameter EMIF_BYPASS_OCT_DDIO = "false";
 
 parameter USE_2X_FF = "false";
 parameter USE_DQS_TRACKING = "false";
@@ -800,35 +799,28 @@ generate
 
 	if (USE_HALF_RATE_OUTPUT == "true")
 	begin
-		if (EMIF_BYPASS_OCT_DDIO == "true")
-		begin
-			assign fr_os_oct = oct_ena[0];
-		end
-		else
-		begin
-			cyclonev_ddio_out
-			#(
-				.half_rate_mode("true"),
-				.use_new_clocking_model("true"),
-				.async_mode("none")
-			) hr_to_fr_os_oct (		
-				.datainhi(oct_ena[0]),
-				.datainlo(oct_ena[1]),
-				.dataout(fr_os_oct),
-				.clkhi (hr_seq_clock),
-				.clklo (hr_seq_clock),
-				.hrbypass(dqshalfratebypass[0]),
-				.muxsel (hr_seq_clock),
-			.clk(),
-			.ena(1'b1),
-			.areset(),
-			.sreset(),
-			.dfflo(),
-			.dffhi(),
-			.devpor(),
-			.devclrn()
-			);
-		end
+		cyclonev_ddio_out
+		#(
+			.half_rate_mode("true"),
+			.use_new_clocking_model("true"),
+			.async_mode("none")
+		) hr_to_fr_os_oct (		
+			.datainhi(oct_ena[0]),
+			.datainlo(oct_ena[1]),
+			.dataout(fr_os_oct),
+			.clkhi (hr_seq_clock),
+			.clklo (hr_seq_clock),
+			.hrbypass(dqshalfratebypass[0]),
+			.muxsel (hr_seq_clock),
+      .clk(),
+      .ena(1'b1),
+      .areset(),
+      .sreset(),
+      .dfflo(),
+      .dffhi(),
+      .devpor(),
+      .devclrn()
+		);
 	end
 	else
 	begin
@@ -837,28 +829,21 @@ generate
 
 	if (USE_HARD_FIFOS == "true")
 	begin
-		if (EMIF_BYPASS_OCT_DDIO == "true")
-		begin
-			assign aligned_os_oct = fr_os_oct;
-		end
-		else
-		begin
-			cyclonev_ddio_oe # (
-			.disable_second_level_register("true")
-			) os_oct_ddio_oe (
-				.clk (dqs_shifted_clock),
-				.oe (fr_os_oct),
-				.octreadcontrol (lfifo_oct),
-				.dataout (aligned_os_oct),
-				.ena (1'b1),
-				.areset (),
-				.sreset (),
-				.dfflo (),
-				.dffhi (),
-				.devpor (),
-				.devclrn ()
-			);
-		end
+		cyclonev_ddio_oe # (
+		.disable_second_level_register("true")
+		) os_oct_ddio_oe (
+			.clk (dqs_shifted_clock),
+			.oe (fr_os_oct),
+			.octreadcontrol (lfifo_oct),
+			.dataout (aligned_os_oct),
+			.ena (1'b1),
+			.areset (),
+			.sreset (),
+			.dfflo (),
+			.dffhi (),
+			.devpor (),
+			.devclrn ()
+		);
 	end
 	else
 	begin
@@ -884,21 +869,14 @@ generate
 	
 	if (USE_DYNAMIC_CONFIG == "true")
 	begin
-		if (EMIF_BYPASS_OCT_DDIO == "true")
-		begin
-			assign delayed_oct = predelayed_os_oct;
-		end
-		else
-		begin
-			cyclonev_delay_chain # (
-				.sim_intrinsic_rising_delay(0),
-				.sim_intrinsic_falling_delay(0)
-			) oct_delay (
-				.datain             (predelayed_os_oct),
-				.delayctrlin        (octdelaysetting1_dlc[0]),
-				.dataout            (delayed_oct)
-			);
-		end
+		cyclonev_delay_chain # (
+			.sim_intrinsic_rising_delay(0),
+			.sim_intrinsic_falling_delay(0)
+		) oct_delay (
+			.datain             (predelayed_os_oct),
+			.delayctrlin        (octdelaysetting1_dlc[0]),
+			.dataout            (delayed_oct)
+		);
 	end
 	else
 	begin
@@ -2254,11 +2232,11 @@ generate
 				/* synthesis translate_off */
 				
 				assert property (@(posedge fr_clock_in or negedge fr_clock_in) (~delayed_oe === 1'b1) |-> delayed_oct === 1'b0) 
-					else $display(1, "OE enabled but dynamic OCT ctrl is not in write mode");
+					else $fatal(1, "OE enabled but dynamic OCT ctrl is not in write mode");
 
 `ifndef BOARD_DELAY_MODEL
 				assert property (@(posedge capture_strobe_out or negedge capture_strobe_out) (~delayed_oe === 1'b0 && read_write_data_io[pin_num] !== 1'bz) |-> delayed_oct === 1'b1) 
-				else $display(1, "Read data comes back but dynamic OCT ctrl is not in read mode");
+				else $fatal(1, "Read data comes back but dynamic OCT ctrl is not in read mode");
 `endif
 
 				/* synthesis translate_on */					

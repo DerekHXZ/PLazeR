@@ -29,7 +29,6 @@
         <define name="DM_PINS_ENABLED" value="1"/>
         <define name="ENABLE_ASSERT" value="0"/>
         <define name="ENABLE_BRINGUP_DEBUGGING" value="0"/>
-        <define name="ENABLE_DELAY_CHAIN_WRITE" value="0"/>
         <define name="ENABLE_DQS_IN_CENTERING" value="1"/>
         <define name="ENABLE_DQS_OUT_CENTERING" value="0"/>
         <define name="ENABLE_EXPORT_SEQ_DEBUG_BRIDGE" value="0"/>
@@ -38,7 +37,6 @@
         <define name="ENABLE_NON_DESTRUCTIVE_CALIB" value="0"/>
         <define name="ENABLE_SUPER_QUICK_CALIBRATION" value="0"/>
         <define name="ENABLE_TCL_DEBUG" value="0"/>
-        <define name="FAKE_CAL_FAIL" value="0"/>
         <define name="FULL_RATE" value="1"/>
         <define name="GUARANTEED_READ_BRINGUP_TEST" value="0"/>
         <define name="HALF_RATE" value="0"/>
@@ -70,13 +68,9 @@
         <define name="LPDDR1" value="0"/>
         <define name="LPDDR2" value="0"/>
         <define name="LRDIMM" value="0"/>
-        <define name="M10_DQ_WIDTH_8" value="0"/>
-        <define name="M10_DQ_WIDTH_16" value="0"/>
-        <define name="M10_DQ_WIDTH_24" value="0"/>
         <define name="MARGIN_VARIATION_TEST" value="0"/>
         <define name="MAX_LATENCY_COUNT_WIDTH" value="5"/>
         <define name="MEM_ADDR_WIDTH" value="13"/>
-        <define name="MRS_MIRROR_PING_PONG_ATSO" value="0"/>
         <define name="MULTIPLE_AFI_WLAT" value="0"/>
         <define name="NUM_SHADOW_REGS" value="1"/>
         <define name="QDRII" value="0"/>
@@ -84,7 +78,7 @@
         <define name="RDIMM" value="0"/>
         <define name="READ_AFTER_WRITE_CALIBRATION" value="1"/>
         <define name="READ_VALID_FIFO_SIZE" value="16"/>
-        <define name="REG_FILE_INIT_SEQ_SIGNATURE" value="0x5555048c"/>
+        <define name="REG_FILE_INIT_SEQ_SIGNATURE" value="0x55550483"/>
         <define name="RLDRAM3" value="0"/>
         <define name="RLDRAMII" value="0"/>
         <define name="RLDRAMX" value="0"/>
@@ -123,10 +117,8 @@
         <define name="TRESET_CNTR1_VAL" value="99"/>
         <define name="TRESET_CNTR2_VAL" value="10"/>
         <define name="TRESET_CNTR0_VAL" value="99"/>
-        <define name="TW0_CAPTURE_CLOCKS" value="0"/>
         <define name="USE_DQS_TRACKING" value="1"/>
         <define name="USE_SHADOW_REGS" value="0"/>
-        <define name="USE_USER_RDIMM_VALUE" value="0"/>
     </sequencer>
     <pll>
         <define name="PLL_MEM_CLK_MULT" value="31"/>
