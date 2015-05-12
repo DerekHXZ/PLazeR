@@ -41,16 +41,16 @@ convmax cm1(.clk        (clk),
 
 always_ff @(posedge clk)
 begin
-	if (reset) memory <= 0;
-	if (write) begin
-		if (byteenable[0]) memory[address] <= writedata[7:0];
-		if (byteenable[1]) memory[address+1] <= writedata[15:8];
-		if (byteenable[2]) memory[address+2] <= writedata[23:16];
-		if (byteenable[3]) memory[address+3] <= writedata[31:24];
-	end
+    if (reset) memory <= 0;
+    if (write) begin
+        if (byteenable[0]) memory[address] <= writedata[7:0];
+        if (byteenable[1]) memory[address+1] <= writedata[15:8];
+        if (byteenable[2]) memory[address+2] <= writedata[23:16];
+        if (byteenable[3]) memory[address+3] <= writedata[31:24];
+    end
 end
 
-assign waitrequest = ~ready;
+assign waitrequest = 0;
 assign readdata[15:0] = maxval;
 assign readdata[23:16] = maxpos;
 
