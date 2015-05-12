@@ -1,4 +1,4 @@
-# (C) 2001-2013 Altera Corporation. All rights reserved.
+# (C) 2001-2014 Altera Corporation. All rights reserved.
 # Your use of Altera Corporation's design tools, logic functions and other 
 # software and tools, and its AMPP partner logic functions, and any output 
 # files any of the foregoing (including device programming or simulation 
@@ -160,6 +160,7 @@ source "$script_dir/hps_sdram_p0_pin_map.tcl"
 
 set family_name [string tolower [regsub -all " +" [get_global_assignment -name FAMILY] ""]]
 
+
 ##############################
 # Clean up stale assignments #
 ##############################
@@ -197,6 +198,7 @@ foreach inst $instances {
 	}
 	array set pins $ddr_db($inst)
 
+
 	hps_sdram_p0_get_rzq_pins $inst all_rzq_pins
 	# Set rzq pin I/O standard
 	foreach rzq_pin $all_rzq_pins {
@@ -224,7 +226,8 @@ foreach inst $instances {
     foreach ck_pin [ concat $pins(ck_pins) $pins(ckn_pins) ] {
       set_instance_assignment -name IO_STANDARD "DIFFERENTIAL $::GLOBAL_hps_sdram_p0_io_standard_differential" -to $ck_pin -tag __$::GLOBAL_hps_sdram_p0_corename
       set_instance_assignment -name OUTPUT_TERMINATION "SERIES 40 OHM WITHOUT CALIBRATION" -to $ck_pin -tag __$::GLOBAL_hps_sdram_p0_corename
-	  set_instance_assignment -name D5_DELAY 2 -to $ck_pin -tag __$::GLOBAL_hps_sdram_p0_corename
+
+      set_instance_assignment -name D5_DELAY 2 -to $ck_pin -tag __$::GLOBAL_hps_sdram_p0_corename
     }
 
     foreach ac_pin $pins(ac_wo_reset_pins) {
@@ -263,6 +266,7 @@ foreach inst $instances {
     foreach ck_pin [ concat $pins(ck_pins) $pins(ckn_pins) ] {
       set_instance_assignment -name IO_STANDARD "DIFFERENTIAL $::GLOBAL_hps_sdram_p0_io_standard_differential CLASS I" -to $ck_pin -tag __$::GLOBAL_hps_sdram_p0_corename
       set_instance_assignment -name OUTPUT_TERMINATION "SERIES 50 OHM WITHOUT CALIBRATION" -to $ck_pin -tag __$::GLOBAL_hps_sdram_p0_corename
+
       set_instance_assignment -name D5_DELAY 2 -to $ck_pin -tag __$::GLOBAL_hps_sdram_p0_corename
     }
 

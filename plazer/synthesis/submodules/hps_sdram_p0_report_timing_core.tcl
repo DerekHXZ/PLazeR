@@ -1,4 +1,4 @@
-# (C) 2001-2013 Altera Corporation. All rights reserved.
+# (C) 2001-2014 Altera Corporation. All rights reserved.
 # Your use of Altera Corporation's design tools, logic functions and other 
 # software and tools, and its AMPP partner logic functions, and any output 
 # files any of the foregoing (including device programming or simulation 
@@ -1804,10 +1804,17 @@ proc hps_sdram_p0_perform_flexible_postamble_timing_analysis {opcs opcname instn
 	
 	set coarse_delay [expr $t(CK)/$dll_length]	
 	set dqsenableextend_regs [list *dq_ddio[*].ubidir_dq_dqs|*|dqs_enable_ctrl~DFFEXTENDDQSENABLE *dq_ddio[*].ubidir_dq_dqs|*|dqs_enable_ctrl~DQSENABLEOUT_DFF]
-	
+	if {$family == "arria v"} {
+		set hps_compensation [expr 0.250 - [hps_sdram_p0_max_in_collection [get_path -rise_to ${instname}|pll|pll|clk_out[0]] "arrival_time"]]
+	} else {
+		set hps_compensation [expr 0.350 - [hps_sdram_p0_max_in_collection [get_path -rise_to ${instname}|pll|pll|clk_out[0]] "arrival_time"]]
+	}
 	# Clock out to DQS path coming back into the FPGA
 	set mem_clock_delay_max [hps_sdram_p0_max_in_collection [get_path -rise_from $pins(pll_write_clock) -rise_to $pins(ck_pins)] "arrival_time"]
 	set mem_clock_delay_min [hps_sdram_p0_min_in_collection [get_path -rise_from $pins(pll_write_clock) -rise_to $pins(ck_pins) -min_path] "arrival_time"]
+
+	set mem_clock_delay_max [expr $mem_clock_delay_max + $hps_compensation]
+
 	set dqs_delay_max  [hps_sdram_p0_max_in_collection [get_path -rise_from $pins(dqs_pins) -fall_to *POSTAMBLE_DFF] "arrival_time"]
 	set dqs_delay_min  [hps_sdram_p0_min_in_collection [get_path -rise_from $pins(dqs_pins) -fall_to *POSTAMBLE_DFF -min_path] "arrival_time"]	
 	set ck_pin_buffer_delay [hps_sdram_p0_round_3dp [expr [hps_sdram_p0_get_min_aiot_delay [lindex $pins(ck_pins) 0]] * 1e9]]
@@ -1818,6 +1825,7 @@ proc hps_sdram_p0_perform_flexible_postamble_timing_analysis {opcs opcname instn
 	# DQS Enable clk to DQS Enable register
 	set clock_delay_max [hps_sdram_p0_max_in_collection [get_path -rise_from $pins(pll_write_clock) -rise_to $dqsenableextend_regs] "arrival_time"]
 	set clock_delay_min [hps_sdram_p0_min_in_collection [get_path -rise_from $pins(pll_write_clock) -rise_to $dqsenableextend_regs -min_path] "arrival_time"]
+	set clock_delay_max [expr $clock_delay_max + $hps_compensation]
 	set t11_delay_max [hps_sdram_p0_max_in_collection [get_path -rise_from $dqsenableextend_regs -fall_to *POSTAMBLE_DFF] "arrival_time"]
 	set t11_delay_min [hps_sdram_p0_min_in_collection [get_path -rise_from $dqsenableextend_regs -fall_to *POSTAMBLE_DFF -min_path] "arrival_time"]
 

@@ -1,4 +1,4 @@
-# (C) 2001-2013 Altera Corporation. All rights reserved.
+# (C) 2001-2014 Altera Corporation. All rights reserved.
 # Your use of Altera Corporation's design tools, logic functions and other 
 # software and tools, and its AMPP partner logic functions, and any output 
 # files any of the foregoing (including device programming or simulation 
@@ -92,6 +92,7 @@ set MP(DQSCK_T) 0.15
 # Initialize the environment
 #############################################################
 
+global quartus
 if { ![info exists quartus(nameofexecutable)] || $quartus(nameofexecutable) != "quartus_sta" } {
 	post_message -type error "This script must be run from quartus_sta"
 	return 1
@@ -457,7 +458,7 @@ foreach inst $instances {
 	
 	write_timing_report
 
-	post_message -type critical_warning "Timing analysis was performed on core ${::GLOBAL_hps_sdram_p0_corename} using Quartus II v13.1 with a preliminary timing model and constraints. You must regenerate this IP in a future version of Quartus II to update the timing constraints to match the timing model."
+
 	incr inst_id
 }
 

@@ -1,4 +1,4 @@
-# (C) 2001-2013 Altera Corporation. All rights reserved.
+# (C) 2001-2014 Altera Corporation. All rights reserved.
 # Your use of Altera Corporation's design tools, logic functions and other 
 # software and tools, and its AMPP partner logic functions, and any output 
 # files any of the foregoing (including device programming or simulation 
@@ -321,11 +321,13 @@ foreach { inst } $instances {
 
 	# This is the CK clock
 	foreach { ck_pin } $ck_pins {
+	set_clock_uncertainty -to [ get_clocks $ck_pin ] $t(WL_JITTER)
 		create_generated_clock -multiply_by 1 -source $pll_write_clock -master_clock "$local_pll_write_clk" $ck_pin -name $ck_pin
 	}
 
 	# This is the CK#clock
 	foreach { ckn_pin } $ckn_pins {
+	set_clock_uncertainty -to [ get_clocks $ck_pin ] $t(WL_JITTER)
 		create_generated_clock -multiply_by 1 -invert -source $pll_write_clock -master_clock "$local_pll_write_clk" $ckn_pin -name $ckn_pin
 	}
 	
@@ -468,7 +470,7 @@ foreach { inst } $instances {
 					set_output_delay -min [hps_sdram_p0_round_3dp [expr {$ac_min_delay + $t(CK)/2}]] -clock [get_clocks $ck_pin] $ac_port -add_delay
 
 					# Specifies the maximum delay difference between the DQS pin and the address/control pins:
-					set_output_delay -max [hps_sdram_p0_round_3dp [expr {$ac_min_delay + $t(CK)/2}]] -clock [get_clocks $ck_pin] $ac_port -add_delay
+					set_output_delay -max [hps_sdram_p0_round_3dp [expr {$ac_max_delay + $t(CK)/2}]] -clock [get_clocks $ck_pin] $ac_port -add_delay
 				}
 			}
 		}

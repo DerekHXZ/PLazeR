@@ -1,4 +1,4 @@
-# (C) 2001-2013 Altera Corporation. All rights reserved.
+# (C) 2001-2014 Altera Corporation. All rights reserved.
 # Your use of Altera Corporation's design tools, logic functions and other 
 # software and tools, and its AMPP partner logic functions, and any output 
 # files any of the foregoing (including device programming or simulation 
@@ -287,7 +287,7 @@ proc hps_sdram_p0_get_core_full_instance_list {corename} {
 	append inst_regexp ${corename}
 	append inst_regexp {:[A-Za-z0-9\.\\_\[\]\-\$():]+\|}
 	append inst_regexp "${corename}_acv_hard_memphy"
-	append inst_regexp {:umemphy}
+        append inst_regexp {:umemphy}
 
 	foreach_in_collection keeper $allkeepers {
 		set name [ get_node_info -name $keeper ]
@@ -304,9 +304,11 @@ proc hps_sdram_p0_get_core_full_instance_list {corename} {
 	if {[ llength $instance_list ] == 0} {
 		post_message -type error "The auto-constraining script was not able to detect any instance for core < $corename >"
 		post_message -type error "Verify the following:"
-      post_message -type error " The core < $corename > is instantiated within another component (wrapper)"
+		post_message -type error " The core < $corename > is instantiated within another component (wrapper)"
 		post_message -type error " The core is not the top-level of the project"
 		post_message -type error " The memory interface pins are exported to the top-level of the project"
+		post_message -type error "Alternatively, if you are no longer instantiating core < $corename >,"
+		post_message -type error " clean up any stale SDC_FILE references from the QSF/QIP files."
 	}
 
 	return $instance_list
@@ -1151,7 +1153,7 @@ proc hps_sdram_p0_get_rzq_pins { instname all_rzq_pins } {
 	set_project_mode -always_show_entity_name qsf
 	set rzqpins $rzq_pins
 }
-# (C) 2001-2013 Altera Corporation. All rights reserved.
+# (C) 2001-2014 Altera Corporation. All rights reserved.
 # Your use of Altera Corporation's design tools, logic functions and other 
 # software and tools, and its AMPP partner logic functions, and any output 
 # files any of the foregoing (including device programming or simulation 
