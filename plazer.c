@@ -130,9 +130,19 @@ static long plazer_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
     return 0;
 }
 
+static int plazer_open(struct inode *i, struct file *f) {
+    return 0;
+}
+
+static int plazer_close(struct inode *i, struct file *f) {
+    return 0;
+}
+
 /* The operations our device knows how to do */
 static const struct file_operations plazer_fops = {
     .owner      = THIS_MODULE,
+    .open       = plazer_open,
+    .close      = plazer_close,
     .unlocked_ioctl = plazer_ioctl,
 };
 
