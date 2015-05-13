@@ -191,7 +191,7 @@ int main(int argc, char **argv) {
 	    }
 
 	    //right filler
-	    if(j + data_width < image.cols) {
+	    if(j + size_data < image.cols) {
 		memcpy(arg.right_fill, raw[i] + j + size_data, size_rightfill);
 	    } else {
 		memset(arg.right_fill, 0, size_rightfill);
