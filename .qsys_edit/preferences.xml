@@ -8,7 +8,7 @@
    <inputclock preferredWidth="139" />
   </columns>
  </systemtable>
- <library expandedCategories="Project,Library" />
- <window width="1610" height="1154" x="0" y="14" />
+ <library expandedCategories="Library,Project" />
+ <window width="1600" height="1150" x="0" y="25" />
  <generation greybox="0" simulation="NONE" />
 </preferences>

@@ -585,6 +585,7 @@ set_location_assignment PIN_AJ1 -to VGA_R[7]
 set_location_assignment PIN_AG2 -to VGA_SYNC_n
 set_location_assignment PIN_AC12 -to VGA_VS
 
+set_global_assignment -name SYSTEMVERILOG_FILE conv.sv
 set_global_assignment -name QIP_FILE plazer/synthesis/plazer.qip
 set_global_assignment -name SYSTEMVERILOG_FILE process_device.sv
 set_global_assignment -name SYSTEMVERILOG_FILE convmax.sv

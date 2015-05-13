@@ -28,30 +28,41 @@ module process_device(
 logic [15:0]        maxval;
 logic [7:0]         maxpos;
 logic               ready;
-logic [151:0][7:0] memory;
+logic [7:0]         memory [0:59];
+logic [7:0]         convval [0:31];
 
 convmax cm1(.clk        (clk),
-            .indata     (memory[143:0]),
-            .gauss      (memory[151:144]),
+            .indata     (memory[0:47]),
+            .gauss      (memory[48:55]),
+				.val        (convval),
             .maxval     (maxval),
             .maxpos     (maxpos),
             .ready      (ready)
             );
 
-
 always_ff @(posedge clk)
 begin
-	if (reset) memory <= 0;
-	if (write) begin
-		if (byteenable[0]) memory[address] <= writedata[7:0];
-		if (byteenable[1]) memory[address+1] <= writedata[15:8];
-		if (byteenable[2]) memory[address+2] <= writedata[23:16];
-		if (byteenable[3]) memory[address+3] <= writedata[31:24];
-	end
+    //if (reset) memory <= 0;
+    if (write) begin
+	     if (address < 56) begin
+            if (byteenable[0]) memory[4 * address] <= writedata[7:0];
+            if (byteenable[1]) memory[4 * address + 1] <= writedata[15:8];
+            if (byteenable[2]) memory[4 * address + 2] <= writedata[23:16];
+            if (byteenable[3]) memory[4 * address + 3] <= writedata[31:24];
+		  end
+		  if (address == 56) memory[8:39] <= convval[0:31];
+    end
+	 memory[56] <= maxval[7:0];
+    memory[57] <= maxval[15:8];
+    memory[58] <= maxpos[7:0];
+    memory[59] <= ready;
 end
 
-assign waitrequest = ~ready;
-assign readdata[15:0] = maxval;
-assign readdata[23:16] = maxpos;
+assign waitrequest = 0;
+
+assign readdata[7:0] = memory[4 * address];
+assign readdata[15:8] = memory[4 * address + 1];
+assign readdata[23:16] = memory[4 * address + 2];
+assign readdata[31:24] = memory[4 * address + 3];
 
 endmodule
