@@ -43,10 +43,36 @@ set m [lindex [get_service_paths master] 0]
 open_service master $m
 puts "Opened master"
 
-# Write a test pattern to the various registers
-foreach {r v} {0 0xff 1 0x1 2 0x2 3 0x4 4 0x8 5 0x10 6 0x20 7 0x40} {
-    master_write_8 $m [expr $vga_led + $r] $v
+# zero out all memory
+foreach i {0 4 8 12 16 20 24 28 32 36 40 44 48 52} {
+    master_write_32 $m [expr $vga_led + $i] 0x00000000
 }
+
+# write convolution buffer
+foreach {r v} {48 0x000000ff 52 0xff000000} {
+    master_write_32 $m [expr $vga_led + $r] $v
+}
+
+# write point location
+master_write_8 $m [expr $vga_led + 0x05] 0xff
+
+foreach i {0 4 8 12 16 20 24 28 32 36 40 44 48 52 56} {
+    set x [master_read_32 $m [expr $vga_led + $i] 1]
+    puts "$i: $x"
+}
+
+set ready [master_read_8 $m [expr $vga_led + 59] 1]
+set pos [master_read_8 $m [expr $vga_led + 58] 1]
+set val [master_read_16 $m [expr $vga_led + 56] 1]
+
+puts "pos: $pos"
+puts "val: $val"
+puts "ready: $ready"
+
+# Write a test pattern to the various registers
+#foreach {r v} {0 0xff 1 0x1 2 0x2 3 0x4 4 0x8 5 0x10 6 0x20 7 0x40} {
+#    master_write_8 $m [expr $vga_led + $r] $v
+#}
 
 close_service master $m
 puts "Closed master"
