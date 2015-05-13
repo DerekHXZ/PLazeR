@@ -142,7 +142,7 @@ static int plazer_close(struct inode *i, struct file *f) {
 static const struct file_operations plazer_fops = {
     .owner      = THIS_MODULE,
     .open       = plazer_open,
-    .close      = plazer_close,
+    .release    = plazer_close,
     .unlocked_ioctl = plazer_ioctl,
 };
 
