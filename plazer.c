@@ -59,7 +59,7 @@ static long plazer_conv_max(plazer_arg_t * user_arg_ptr) {
     arg.convmax = (dev.buffer[RESULT_LOC] & MAXVAL_MASK) >> MAXVAL_OFFSET;
     arg.maxpos = (dev.buffer[RESULT_LOC] & MAXPOS_MASK) >> MAXPOS_OFFSET;
 
-    if (copy_to_user(&arg, user_arg_ptr, sizeof(plazer_arg_t))) {
+    if (copy_to_user(user_arg_ptr, &arg, sizeof(plazer_arg_t))) {
         return -EACCES;
     }
     return 0;
@@ -95,7 +95,7 @@ static long plazer_read_memory(plazer_mem_t *user_arg_ptr) {
     arg.data.convmax = (dev.buffer[RESULT_LOC] & MAXVAL_MASK) >> MAXVAL_OFFSET;
     arg.data.maxpos = (dev.buffer[RESULT_LOC] & MAXPOS_MASK) >> MAXPOS_OFFSET;
 
-    if (copy_to_user(&arg, user_arg_ptr, sizeof(plazer_mem_t))) {
+    if (copy_to_user(user_arg_ptr, &arg, sizeof(plazer_mem_t))) {
         return -EACCES;
     }
     return 0;
