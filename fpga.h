@@ -7,7 +7,7 @@
 #define DATA_START          (FPGA_BASE_ADDRESS + 0x00)
 #define DATA_CONV_START     (DATA_START + 8)
 #define DATA_CONV_END       (DATA_CONV_START + 32)
-#define DATA_END            (DATA_START + 44)
+#define DATA_END            (DATA_START + 48)
 
 #define FILTER_START        (DATA_END)
 #define FILTER_END          (DATA_END + 8)
