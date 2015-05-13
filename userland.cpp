@@ -180,8 +180,8 @@ int main(int argc, char **argv) {
     size_t size_data = sizeof(arg.data);
     size_t size_rightfill = sizeof(arg.right_fill);
     for(int i = 0; i < image.rows; ++i) {
-	for(int j = 0; j < image.cols; j += data_width) {
-	    memcpy(arg.data, raw[i] + j, data_width);
+	for(int j = 0; j < image.cols; j += size_data) {
+	    memcpy(arg.data, raw[i] + j, size_data);
 	    
 	    //left filler
 	    if(j) {
@@ -192,7 +192,7 @@ int main(int argc, char **argv) {
 
 	    //right filler
 	    if(j + data_width < image.cols) {
-		memcpy(arg.right_fill, raw[i] + j + data_width, size_rightfill);
+		memcpy(arg.right_fill, raw[i] + j + size_data, size_rightfill);
 	    } else {
 		memset(arg.right_fill, 0, size_rightfill);
 	    }
