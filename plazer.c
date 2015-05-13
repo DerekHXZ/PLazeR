@@ -149,7 +149,7 @@ static struct miscdevice plazer_misc_device = {
  */
 static int __init plazer_probe(struct platform_device *pdev)
 {
-    static unsigned char welcome_message[plazer_DIGITS] = {
+    static unsigned char welcome_message[PLAZER_DIGITS] = {
         0x3E, 0x7D, 0x77, 0x08, 0x38, 0x79, 0x5E, 0x00};
     int i, ret;
 
@@ -178,7 +178,7 @@ static int __init plazer_probe(struct platform_device *pdev)
     }
 
     /* Display a welcome message */
-    for (i = 0; i < plazer_DIGITS; i++)
+    for (i = 0; i < PLAZER_DIGITS; i++)
         write_digit(i, welcome_message[i]);
 
     return 0;

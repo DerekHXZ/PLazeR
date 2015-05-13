@@ -4,7 +4,7 @@
 #include <linux/ioctl.h>
 #include "fpga.h"
 
-#define VGA_LED_DIGITS 8
+#define PLAZER_DIGITS 8
 
 typedef struct {
     unsigned char   left_fill[DATA_CONV_START - DATA_START];
