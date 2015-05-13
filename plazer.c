@@ -73,8 +73,9 @@ static long plazer_set_convolution(plazer_conv_t * user_arg_ptr) {
 
     memcpy(dev.buffer + FILTER_START, arg.conv, FILTER_END - FILTER_START);
 
+    int i;
     printk(KERN_INFO "---\n");
-    for (int i = FILTER_START; i < FILTER_END; i++) {
+    for (i = FILTER_START; i < FILTER_END; i++) {
         printk(KERN_INFO "%x\n", dev.buffer[i]);
     }
     printk(KERN_INFO "---\n");
