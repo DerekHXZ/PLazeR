@@ -176,11 +176,11 @@ static int __init plazer_probe(struct platform_device *pdev)
         ret = -ENOMEM;
         goto out_release_mem_region;
     }
-
+    
     /* Display a welcome message */
-    for (i = 0; i < PLAZER_DIGITS; i++)
-        write_digit(i, welcome_message[i]);
-
+    // for (i = 0; i < PLAZER_DIGITS; i++)
+    //    write_digit(i, welcome_message[i]);
+    
     return 0;
 
 out_release_mem_region:
