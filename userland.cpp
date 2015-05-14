@@ -17,6 +17,8 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
+const double w0 = 1445.9, w1 = -0.756;
+
 int plazer_fd;
 
 int emulation_mode = 0;
@@ -208,7 +210,7 @@ int main(int argc, char **argv) {
 		row_maxpos = j + arg.maxpos;
 	    }
 	}
-	printf("row = %d; maxpos = %d; convmax = %d\n", i, row_maxpos, row_convmax);
+	printf("row = %d; distance = %.4f\n", i, w0 * pow(row_maxpos, w1));
     }
     printf("plazer userspace program terminating\n");
 
