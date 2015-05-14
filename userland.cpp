@@ -156,7 +156,9 @@ int main(int argc, char **argv) {
 
     printf("plazer userspace program started\n");
 
-    cv::Mat image = cv::imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
+    cv::Mat color_image = cv::imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
+    cv::Mat image;
+    cv::cvtColor(color_image, image, CV_BGR2GRAY);
     unsigned char raw[image.rows][image.cols];
     for(int i=0; i<image.rows; ++i)
 	for(int j=0; j<image.cols; ++j)
