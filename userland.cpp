@@ -17,7 +17,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-const double w0 = 1445.9, w1 = -0.756;
+const double w0 = 15138.3, w1 = -1.32275;
 
 int plazer_fd;
 
