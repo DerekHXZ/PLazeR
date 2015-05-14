@@ -203,7 +203,7 @@ int main(int argc, char **argv) {
 
 	    if(arg.convmax > row_convmax) {
 		row_convmax = arg.convmax;
-		row_maxpos = arg.maxpos;
+		row_maxpos = j + arg.maxpos;
 	    }
 	}
 	printf("row = %d; maxpos = %d; convmax = %d\n", i, row_maxpos, row_convmax);
